@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de D.R.E. - Demonstração do Resultado do Exercício</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', 'Lato', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .info-box strong {
+            color: #667eea;
+        }
+
+        .buttons-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .example-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .example-btn:hover {
+            background: #5568d3;
+        }
+
+        .clear-btn {
+            grid-column: 1 / -1;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background: #c0392b;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .label-container {
+            flex: 1;
+        }
+
+        label {
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .label-description {
+            font-size: 12px;
+            color: #888;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            flex: 0 0 180px;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Roboto', Arial, sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+        }
+
+        input[readonly] {
+            background-color: #f5f5f5;
+            color: #333;
+            font-weight: bold;
+            cursor: not-allowed;
+            border-color: #d0d0d0;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #667eea;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .section-description {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .result-field {
+            background-color: #f0f0f0;
+            border: 2px solid #d0d0d0;
+        }
+
+        .operator {
+            color: #666;
+            font-weight: bold;
+            width: 40px;
+            text-align: center;
+        }
+
+        .input-percentage {
+            position: relative;
+            flex: 0 0 180px;
+        }
+
+        .input-percentage input {
+            width: 100%;
+            padding-right: 30px; /* Espaço para o % */
+        }
+
+        .input-percentage::after {
+            content: '%';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .buttons-group {
+                grid-template-columns: 1fr;
+            }
+
+            input[type="text"],
+            input[type="number"] {
+                flex: 0 0 120px;
+            }
+
+            .form-row {
+                flex-wrap: wrap;
+            }
+
+            .label-container {
+                flex: 1 0 100%;
+                margin-bottom: 5px;
+            }
+
+            input[type="text"],
+            input[type="number"] {
+                flex: 1 0 100%;
+            }
+
+            .input-percentage {
+                flex: 1 0 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de D.R.E.</h1>
+        <p class="subtitle">Demonstração do Resultado do Exercício</p>
+
+        <div class="info-box">
+            <strong>O que é D.R.E.?</strong> A Demonstração do Resultado do Exercício é um relatório contábil que mostra o desempenho financeiro de uma empresa em um período específico, começando com a receita bruta e terminando com o lucro ou prejuízo líquido.
+        </div>
+
+        <div class="buttons-group">
+            <button class="example-btn" onclick="carregarExemplo(1)">Exemplo 1</button>
+            <button class="example-btn" onclick="carregarExemplo(2)">Exemplo 2</button>
+            <button class="example-btn" onclick="carregarExemplo(3)">Exemplo 3</button>
+            <button class="clear-btn" onclick="limparTudo()">Limpar Tudo</button>
+        </div>
+
+        <form id="dreForm">
+            <!-- SEÇÃO 1: RECEITA -->
+            <div class="section-title">1. Receita Operacional</div>
+            <div class="section-description">
+                Esta seção representa o faturamento bruto da empresa, antes de qualquer dedução.
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="label-container">
+                        <label for="receitaBruta">(+) Receita Operacional Bruta</label>
+                        <div class="label-description">Todas as vendas de produtos ou serviços, sem descontos ou impostos.</div>
+                    </div>
+                    <div class="operator">+</div>
+                    <input type="number" id="receitaBruta" placeholder="0.00" step="0.01" oninput="calcular()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="label-container">
+                        <label for="deducoes">(-) Deduções (Impostos, Devoluções)</label>
+                        <div class="label-description">ICMS, ISS, IPI e devoluções de clientes são subtraídos da receita bruta.</div>
+                    </div>
+                    <div class="operator">-</div>
+                    <input type="number" id="deducoes" placeholder="0.00" step="0.01" oninput="calcular()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="label-container">
+                        <label for="receitaLiquida">(=) Receita Operacional Líquida</label>
+                        <div class="label-description">Receita bruta menos as deduções. Este é o valor real que a empresa recebeu.</div>
+                    </div>
+                    <div class="operator">=</div>
+                    <input type="text" id="receitaLiquida" readonly>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 2: CUSTOS -->
+            <div class="section-title">2. Custos Diretos</div>
+            <div class="section-description">
+                Os custos diretos estão relacionados à produção ou aquisição dos produtos/serviços vendidos.
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="label-container">
+                        <label for="custos">(-) Custos (CMV, Custos de Serviço)</label>
+                        <div class="label-description">Custo das Mercadorias Vendidas (CMV) ou custo direto dos serviços prestados.</div>
+                    </div>
+                    <div class="operator">-</div>
+                    <input type="number" id="custos" placeholder="0.00" step="0.01" oninput="calcular()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="label-container">
+                        <label for="lucroBruto">(=) Lucro Bruto</label>
+                        <div class="label-description">Receita líquida menos os custos diretos. Mostra o ganho antes das despesas operacionais.</div>
+                    </div>
+                    <div class="operator">=</div>
+                    <input type="text" id="lucroBruto" readonly>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 3: DESPESAS OPERACIONAIS -->
+            <div class="section-title">3. Despesas Operacionais</div>
+            <div class="section-description">
+                Despesas necessárias para manter a operação da empresa, como salários, aluguel e marketing.
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="label-container">
+                        <label for="despesasOp">(-) Despesas Operacionais (Admin, Vendas, Fin.)</label>
+                        <div class="label-description">Soma de despesas administrativas, de vendas e financeiras (juros, taxas bancárias).</div>
+                    </div>
+                    <div class="operator">-</div>
+                    <input type="number" id="despesasOp" placeholder="0.00" step="0.01" oninput="calcular()">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="label-container">
+                        <label for="lucroOp">(=) Lucro Operacional (LAIR)</label>
+                        <div class="label-description">Lucro Antes do Imposto de Renda. Mostra o ganho da operação principal da empresa.</div>
+                    </div>
+                    <div class="operator">=</div>
+                    <input type="text" id="lucroOp" readonly>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 4: IMPOSTOS E RESULTADO FINAL -->
+            <div class="section-title">4. Impostos e Resultado Final</div>
+            <div class="section-description">
+                O imposto de renda é calculado sobre o lucro operacional e reduz o lucro final da empresa.
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="label-container">
+                        <label for="irPorcentagem">(-) Imposto de Renda (IR) em %</label>
+                        <div class="label-description">Porcentagem aplicada sobre o Lucro Operacional (LAIR).</div>
+                    </div>
+                    <div class="operator">-</div>
+                    <div class="input-percentage">
+                        <input type="number" id="irPorcentagem" placeholder="0.00" step="0.01" oninput="calcular()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="label-container">
+                        <label for="irValor">(-) Valor do Imposto de Renda</label>
+                        <div class="label-description">Valor calculado automaticamente com base na porcentagem.</div>
+                    </div>
+                    <div class="operator">-</div>
+                    <input type="text" id="irValor" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="label-container">
+                        <label for="lucroLiquido">(=) Lucro Líquido</label>
+                        <div class="label-description">O resultado final: o lucro que realmente fica para a empresa após todos os gastos e impostos.</div>
+                    </div>
+                    <div class="operator">=</div>
+                    <input type="text" id="lucroLiquido" readonly>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Exemplos de dados (IR agora é porcentagem)
+        const exemplos = {
+            // Exemplo 1 (Original Exemplo 2) - Lucro Operacional: 24600. IR: 0. Porcentagem: 0%
+            1: {
+                receitaBruta: 75000,
+                deducoes: 9900,
+                custos: 19250,
+                despesasOp: 21250,
+                irPorcentagem: 0
+            },
+            // Exemplo 2 (Original Exemplo 3) - Lucro Operacional: 26000. IR: 3900. Porcentagem: 3900/26000 * 100 = 15%
+            2: {
+                receitaBruta: 110000,
+                deducoes: 15000,
+                custos: 35000,
+                despesasOp: 34000,
+                irPorcentagem: 15
+            },
+            // Exemplo 3 (Original Exemplo 4) - Lucro Operacional: 29050. IR: 4357.50. Porcentagem: 4357.50/29050 * 100 = 15%
+            3: {
+                receitaBruta: 75000,
+                deducoes: 13500,
+                custos: 18450,
+                despesasOp: 14000,
+                irPorcentagem: 15
+            }
+        };
+
+        function formatarMoeda(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(valor);
+        }
+
+        function obterValor(id) {
+            const elemento = document.getElementById(id);
+            const valor = elemento.value;
+            return valor === '' ? 0 : parseFloat(valor);
+        }
+
+        function calcular() {
+            // Obter valores de entrada
+            const receitaBruta = obterValor('receitaBruta');
+            const deducoes = obterValor('deducoes');
+            const custos = obterValor('custos');
+            const despesasOp = obterValor('despesasOp');
+            const irPorcentagem = obterValor('irPorcentagem');
+
+            // 1. Receita Operacional Líquida
+            const receitaLiquida = receitaBruta - deducoes;
+            document.getElementById('receitaLiquida').value = formatarMoeda(receitaLiquida);
+
+            // 2. Lucro Bruto
+            const lucroBruto = receitaLiquida - custos;
+            document.getElementById('lucroBruto').value = formatarMoeda(lucroBruto);
+
+            // 3. Lucro Operacional (LAIR)
+            const lucroOp = lucroBruto - despesasOp;
+            document.getElementById('lucroOp').value = formatarMoeda(lucroOp);
+
+            // 4. Imposto de Renda (IR)
+            let irValor = 0;
+            if (lucroOp > 0) {
+                irValor = lucroOp * (irPorcentagem / 100);
+            }
+            document.getElementById('irValor').value = formatarMoeda(irValor);
+
+            // 5. Lucro Líquido
+            const lucroLiquido = lucroOp - irValor;
+            document.getElementById('lucroLiquido').value = formatarMoeda(lucroLiquido);
+        }
+
+        function carregarExemplo(numero) {
+            const exemplo = exemplos[numero];
+            if (!exemplo) return;
+
+            document.getElementById('receitaBruta').value = exemplo.receitaBruta;
+            document.getElementById('deducoes').value = exemplo.deducoes;
+            document.getElementById('custos').value = exemplo.custos;
+            document.getElementById('despesasOp').value = exemplo.despesasOp;
+            document.getElementById('irPorcentagem').value = exemplo.irPorcentagem;
+
+            calcular();
+        }
+
+        function limparTudo() {
+            document.getElementById('receitaBruta').value = '';
+            document.getElementById('deducoes').value = '';
+            document.getElementById('custos').value = '';
+            document.getElementById('despesasOp').value = '';
+            document.getElementById('irPorcentagem').value = '';
+            
+            // Limpar campos calculados
+            document.getElementById('receitaLiquida').value = '';
+            document.getElementById('lucroBruto').value = '';
+            document.getElementById('lucroOp').value = '';
+            document.getElementById('irValor').value = '';
+            document.getElementById('lucroLiquido').value = '';
+        }
+
+        // Inicializar cálculos ao carregar a página
+        window.addEventListener('load', calcular);
+    </script>
+</body>
+</html>
